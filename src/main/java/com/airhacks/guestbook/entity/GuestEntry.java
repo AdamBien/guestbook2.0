@@ -32,4 +32,9 @@ public class GuestEntry {
 
     protected GuestEntry() {
     }
+
+    public long getId() {
+        return id;
+    }
+
 }
