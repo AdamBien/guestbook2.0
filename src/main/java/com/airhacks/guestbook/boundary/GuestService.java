@@ -4,7 +4,6 @@ package com.airhacks.guestbook.boundary;
 import com.airhacks.Boundary;
 import com.airhacks.guestbook.entity.GuestEntry;
 import java.util.List;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -12,7 +11,6 @@ import javax.persistence.PersistenceContext;
  *
  * @author airhacks.com
  */
-@Stateless
 @Boundary
 public class GuestService {
 
