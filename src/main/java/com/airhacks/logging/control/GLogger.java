@@ -7,6 +7,5 @@ package com.airhacks.logging.control;
  */
 @FunctionalInterface
 public interface GLogger {
-
     void log(String msg);
 }

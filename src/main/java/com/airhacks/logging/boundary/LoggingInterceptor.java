@@ -18,9 +18,12 @@ public class LoggingInterceptor {
     @Inject
     private GLogger LOG;
 
+    @Inject
+    String prefix;
+
     @AroundInvoke
     public Object log(InvocationContext ic) throws Exception {
-        LOG.log("Method invoked: " + ic.getMethod());
+        LOG.log(prefix + ic.getMethod());
         return ic.proceed();
     }
 }
