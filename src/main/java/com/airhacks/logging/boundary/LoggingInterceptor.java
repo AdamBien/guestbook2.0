@@ -1,8 +1,8 @@
 
 package com.airhacks.logging.boundary;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.airhacks.logging.control.GLogger;
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -15,11 +15,12 @@ import javax.interceptor.InvocationContext;
 @Interceptor
 public class LoggingInterceptor {
 
-    private static final Logger LOG = Logger.getLogger(LoggingInterceptor.class.getName());
+    @Inject
+    private GLogger LOG;
 
     @AroundInvoke
     public Object log(InvocationContext ic) throws Exception {
-        LOG.log(Level.INFO, "Method invoked: {0}", ic.getMethod());
+        LOG.log("Method invoked: " + ic.getMethod());
         return ic.proceed();
     }
 }
