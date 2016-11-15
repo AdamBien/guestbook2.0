@@ -1,18 +1,21 @@
 
-package com.airhacks.logging.boundary;
+package com.airhacks;
 
+import com.airhacks.logging.boundary.Loggable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.interceptor.InterceptorBinding;
+import javax.enterprise.inject.Stereotype;
 
 /**
  *
  * @author airhacks.com
  */
-@InterceptorBinding
-@Target({ElementType.TYPE})
+@Loggable
+@Stereotype
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Loggable {
+public @interface Boundary {
+
 }
