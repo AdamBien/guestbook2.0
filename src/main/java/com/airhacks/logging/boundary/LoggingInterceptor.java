@@ -1,6 +1,7 @@
 
 package com.airhacks.logging.boundary;
 
+import com.airhacks.configuration.boundary.ConfigurationKey;
 import com.airhacks.configuration.boundary.DefaultValue;
 import com.airhacks.logging.control.GLogger;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ public class LoggingInterceptor {
     private GLogger LOG;
 
     @Inject
+    @ConfigurationKey("logging.prefix")
     @DefaultValue("Method: ")
     String prefix;
 

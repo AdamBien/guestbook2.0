@@ -18,6 +18,10 @@ public class Configurator {
         Optional<String> optionalDefault = Optional.
                 ofNullable(defaultConfig).
                 map(a -> a.value());
-        return System.getProperty(name, optionalDefault.orElse("-not-set-"));
+        ConfigurationKey configurationKey = ip.getAnnotated().getAnnotation(ConfigurationKey.class);
+        Optional<String> optionalKey = Optional.
+                ofNullable(configurationKey).
+                map(c -> c.value());
+        return System.getProperty(optionalKey.orElse(name), optionalDefault.orElse("-not-set-"));
     }
 }
