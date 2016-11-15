@@ -2,10 +2,9 @@
 package com.airhacks.guestbook.boundary;
 
 import com.airhacks.guestbook.entity.GuestEntry;
-import com.airhacks.logging.control.LoggingInterceptor;
+import com.airhacks.logging.boundary.Loggable;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -14,7 +13,7 @@ import javax.persistence.PersistenceContext;
  * @author airhacks.com
  */
 @Stateless
-@Interceptors(LoggingInterceptor.class)
+@Loggable
 public class GuestService {
 
     @PersistenceContext
