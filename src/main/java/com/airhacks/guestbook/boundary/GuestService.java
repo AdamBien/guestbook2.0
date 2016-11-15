@@ -27,4 +27,8 @@ public class GuestService {
                 createNamedQuery(GuestEntry.findAll, GuestEntry.class).
                 getResultList();
     }
+
+    public GuestEntry find(long id) {
+        return this.em.find(GuestEntry.class, id);
+    }
 }
