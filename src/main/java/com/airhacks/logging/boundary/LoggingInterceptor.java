@@ -1,6 +1,7 @@
 
 package com.airhacks.logging.boundary;
 
+import com.airhacks.configuration.boundary.DefaultValue;
 import com.airhacks.logging.control.GLogger;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -19,6 +20,7 @@ public class LoggingInterceptor {
     private GLogger LOG;
 
     @Inject
+    @DefaultValue("Method: ")
     String prefix;
 
     @AroundInvoke
