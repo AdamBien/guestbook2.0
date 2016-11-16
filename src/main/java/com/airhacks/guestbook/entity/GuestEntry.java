@@ -37,4 +37,8 @@ public class GuestEntry {
         return id;
     }
 
+    boolean isValid() {
+        return id == 0 && this.content != null && !this.content.contains("<");
+    }
+
 }

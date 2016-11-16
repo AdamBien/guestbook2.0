@@ -2,6 +2,7 @@
 package com.airhacks.guestbook.boundary;
 
 import com.airhacks.guestbook.entity.GuestEntry;
+import com.airhacks.guestbook.entity.GuestEntryContent;
 import java.net.URI;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -37,7 +38,7 @@ public class EntriesResource {
     }
 
     @POST
-    public Response save(GuestEntry entry, @Context UriInfo info) {
+    public Response save(@GuestEntryContent GuestEntry entry, @Context UriInfo info) {
         GuestEntry created = this.service.save(entry);
         long id = created.getId();
         URI uri = info.
