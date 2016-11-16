@@ -3,15 +3,22 @@ package com.airhacks.guestbook.boundary;
 
 import com.airhacks.guestbook.entity.GuestEntry;
 import com.airhacks.guestbook.entity.GuestEntryContent;
-import java.net.URI;
+import java.io.Serializable;
 import java.util.List;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -21,32 +28,41 @@ import javax.ws.rs.core.UriInfo;
  */
 @Stateless
 @Path("entries")
-public class EntriesResource {
+public class EntriesResource implements Serializable {
 
     @Inject
     GuestService service;
 
+    @Resource
+    ManagedExecutorService mes;
+
     @GET
-    public List<GuestEntry> all() {
-        return service.all();
+    public void all(@Suspended AsyncResponse response) {
+        response.setTimeout(1, TimeUnit.SECONDS);
+        supplyAsync(service::all, mes).
+                thenApply(this::provideTypeInformation).
+                thenAccept(response::resume);
+    }
+
+    GenericEntity<List<GuestEntry>> provideTypeInformation(List<GuestEntry> entry) {
+        return new GenericEntity<List<GuestEntry>>(entry) {
+        };
     }
 
     @GET
     @Path("{id}")
-    public GuestEntry find(@PathParam("id") long id) {
-        return this.service.find(id);
+    public void find(@PathParam("id") long id, @Suspended AsyncResponse response) {
+        response.setTimeout(1, TimeUnit.SECONDS);
+        supplyAsync(() -> this.service.find(id), mes).
+                thenAccept(response::resume);
     }
 
     @POST
-    public Response save(@GuestEntryContent GuestEntry entry, @Context UriInfo info) {
-        GuestEntry created = this.service.save(entry);
-        long id = created.getId();
-        URI uri = info.
-                getAbsolutePathBuilder().
-                path("/" + id).
-                build();
-        return Response.
-                created(uri).
-                build();
+    public void save(@GuestEntryContent GuestEntry entry, @Context UriInfo info, @Suspended AsyncResponse response) {
+        supplyAsync(() -> this.service.save(entry)).thenApply(g -> g.getId()).
+                thenApply(id -> info.getAbsolutePathBuilder().path("/" + id).build()).
+                thenApply(uri -> Response.created(uri).build()).
+                thenAccept(response::resume);
     }
+
 }

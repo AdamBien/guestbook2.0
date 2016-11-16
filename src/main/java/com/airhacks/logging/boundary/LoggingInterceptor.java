@@ -4,6 +4,7 @@ package com.airhacks.logging.boundary;
 import com.airhacks.configuration.boundary.ConfigurationKey;
 import com.airhacks.configuration.boundary.DefaultValue;
 import com.airhacks.logging.control.GLogger;
+import java.io.Serializable;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -15,7 +16,7 @@ import javax.interceptor.InvocationContext;
  */
 @Loggable
 @Interceptor
-public class LoggingInterceptor {
+public class LoggingInterceptor implements Serializable {
 
     @Inject
     private GLogger LOG;
