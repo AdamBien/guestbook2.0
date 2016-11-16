@@ -3,7 +3,6 @@ package com.airhacks.guestbook.boundary;
 
 import com.airhacks.Boundary;
 import com.airhacks.guestbook.entity.GuestEntry;
-import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,7 +14,7 @@ import javax.persistence.PersistenceContext;
  */
 @Boundary
 @Stateless
-public class GuestService implements Serializable {
+public class GuestService {
 
     @PersistenceContext
     EntityManager em;

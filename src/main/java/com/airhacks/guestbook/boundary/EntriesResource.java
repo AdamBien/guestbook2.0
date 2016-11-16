@@ -5,6 +5,7 @@ import com.airhacks.guestbook.entity.GuestEntry;
 import com.airhacks.guestbook.entity.GuestEntryContent;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
@@ -40,6 +41,7 @@ public class EntriesResource implements Serializable {
     public void all(@Suspended AsyncResponse response) {
         response.setTimeout(1, TimeUnit.SECONDS);
         supplyAsync(service::all, mes).
+                whenComplete((result, error) -> Optional.ofNullable(error).ifPresent(response::resume)).
                 thenApply(this::provideTypeInformation).
                 thenAccept(response::resume);
     }
@@ -49,20 +51,23 @@ public class EntriesResource implements Serializable {
         };
     }
 
+
     @GET
     @Path("{id}")
     public void find(@PathParam("id") long id, @Suspended AsyncResponse response) {
         response.setTimeout(1, TimeUnit.SECONDS);
         supplyAsync(() -> this.service.find(id), mes).
+                whenComplete((result, error) -> Optional.ofNullable(error).ifPresent(response::resume)).
                 thenAccept(response::resume);
     }
 
     @POST
-    public void save(@GuestEntryContent GuestEntry entry, @Context UriInfo info, @Suspended AsyncResponse response) {
+    public void save(@GuestEntryContent GuestEntry entry, @Context UriInfo info,
+            @Suspended AsyncResponse response) {
         supplyAsync(() -> this.service.save(entry)).thenApply(g -> g.getId()).
+                whenComplete((result, error) -> Optional.ofNullable(error).ifPresent(response::resume)).
                 thenApply(id -> info.getAbsolutePathBuilder().path("/" + id).build()).
                 thenApply(uri -> Response.created(uri).build()).
                 thenAccept(response::resume);
     }
-
 }
