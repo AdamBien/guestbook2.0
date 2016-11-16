@@ -5,7 +5,7 @@ package com.airhacks.configuration.control;
  *
  * @author airhacks.com
  */
-@DeploymentTarget(DeploymentTarget.Environment.DOCKER)
+@Docker
 public class EnvironmentEntrySource implements ConfigurationSource {
     @Override
     public String get(String key, String defaultValue) {

@@ -6,4 +6,7 @@
     <interceptors>
         <class>com.airhacks.logging.boundary.LoggingInterceptor</class>
     </interceptors>
+    <alternatives>
+        <stereotype>com.airhacks.configuration.control.Host</stereotype>
+    </alternatives>
 </beans>

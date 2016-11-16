@@ -2,7 +2,7 @@
 package com.airhacks.configuration.boundary;
 
 import com.airhacks.configuration.control.ConfigurationSource;
-import com.airhacks.configuration.control.DeploymentTarget;
+import com.airhacks.logging.control.GLogger;
 import java.util.Optional;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -15,11 +15,14 @@ import javax.inject.Inject;
 public class Configurator {
 
     @Inject
-    @DeploymentTarget(DeploymentTarget.Environment.HOST)
     ConfigurationSource source;
+
+    @Inject
+    GLogger LOG;
 
     @Produces
     public String expose(InjectionPoint ip) {
+        LOG.log("Using: " + source.getClass().getName());
         String name = ip.getMember().getName();
         DefaultValue defaultConfig = ip.getAnnotated().getAnnotation(DefaultValue.class);
         Optional<String> optionalDefault = Optional.
