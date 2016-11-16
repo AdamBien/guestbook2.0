@@ -1,15 +1,22 @@
 
 package com.airhacks.configuration.boundary;
 
+import com.airhacks.configuration.control.ConfigurationSource;
+import com.airhacks.configuration.control.DeploymentTarget;
 import java.util.Optional;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 
 /**
  *
  * @author airhacks.com
  */
 public class Configurator {
+
+    @Inject
+    @DeploymentTarget(DeploymentTarget.Environment.HOST)
+    ConfigurationSource source;
 
     @Produces
     public String expose(InjectionPoint ip) {
@@ -22,6 +29,6 @@ public class Configurator {
         Optional<String> optionalKey = Optional.
                 ofNullable(configurationKey).
                 map(c -> c.value());
-        return System.getProperty(optionalKey.orElse(name), optionalDefault.orElse("-not-set-"));
+        return this.source.get(optionalKey.orElse(name), optionalDefault.orElse("-not-set-"));
     }
 }
